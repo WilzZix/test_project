@@ -15,25 +15,41 @@ class _TablePageState extends State<TablePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Center(
-                child: Text(
-                  'Список стран по добыче нефти в % по данным «Опек»,',
-                  style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              PieChartWidget(),
-              const TableWidget(),
-            ],
-          ),
-        ),
+        body: OrientationBuilder(builder: (context, orientation) {
+          return SingleChildScrollView(
+            child: orientation == Orientation.portrait
+                ? Column(
+                    children: [
+                      const Center(
+                        child: Text(
+                          'Список стран по добыче нефти в % по данным «Опек»,',
+                          style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      PieChartWidget(),
+                      const TableWidget(),
+                    ],
+                  )
+                : Column(
+                    children: const [
+                      Center(
+                        child: Text(
+                          'Список стран по добыче нефти в % по данным «Опек»,',
+                          style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TableWidget(),
+                    ],
+                  ),
+          );
+        }),
       ),
     );
   }
 }
-
