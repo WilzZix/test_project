@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:test_project/application/login/login_event.dart';
 import 'package:test_project/screens/login_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/screens/table_page/table_page.dart';
+import 'application/login/login_bloc.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+  runApp(
+    MaterialApp(
+      home: BlocBuilder<LoginBloc, LoginState>(
+        bloc: LoginBloc()..add(CheckLoggedInStateEvent()),
+        builder: (context, state) {
+          if (state is LoggedInState) {
+            return const TablePage();
+          } else {
+            return const LoginPage();
+          }
+        },
       ),
-      home:  const TablePage(),
-    );
-  }
+    ),
+  );
 }

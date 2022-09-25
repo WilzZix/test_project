@@ -1,6 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:test_project/screens/login_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../application/registration/registration_bloc.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -10,6 +11,8 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  String phone = '', name = '', password = '';
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -68,6 +71,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: Column(
                             children: <Widget>[
                               TextField(
+                                onChanged: (value) {
+                                  name = value;
+                                },
                                 keyboardType: TextInputType.name,
                                 decoration: InputDecoration(
                                   hintText: 'Введите свой имя',
@@ -91,6 +97,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                               const SizedBox(height: 20),
                               TextField(
+                                onChanged: (value) {
+                                  phone = value;
+                                },
                                 keyboardType: TextInputType.phone,
                                 decoration: InputDecoration(
                                   hintText: 'Введите свой номер телефона',
@@ -114,6 +123,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                               const SizedBox(height: 20),
                               TextField(
+                                onChanged: (value) {
+                                  password = value;
+                                },
                                 decoration: InputDecoration(
                                   hintText: 'Введите пароль',
                                   hintStyle: const TextStyle(
@@ -137,32 +149,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginPage(),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  height: 50,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF203C7C),
-                                    borderRadius: BorderRadius.circular(14),
-                                    shape: BoxShape.rectangle,
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      'Зарегистрироваться',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
+                              BlocProvider(
+                                create: (context) => RegistrationBloc(),
+                                child: BlocBuilder<RegistrationBloc, RegistrationState>(
+                                  builder: (context, state) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        RegistrationBloc().add(UserRegisterEvent(phone, password, name));
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const LoginPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF203C7C),
+                                          borderRadius: BorderRadius.circular(14),
+                                          shape: BoxShape.rectangle,
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Зарегистрироваться',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(
