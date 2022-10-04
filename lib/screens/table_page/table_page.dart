@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../application/login/login_bloc.dart';
 import '../../application/login/login_event.dart';
 import '../login_page.dart';
@@ -28,7 +29,8 @@ class _TablePageState extends State<TablePage> {
                   icon: const Icon(
                     Icons.logout,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
                     LoginBloc().add(LogOutEvent());
                     Navigator.push(
                       context,

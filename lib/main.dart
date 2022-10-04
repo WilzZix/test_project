@@ -4,21 +4,25 @@ import 'package:test_project/screens/login_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/screens/table_page/table_page.dart';
 import 'application/login/login_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
   runApp(
-    MaterialApp(
-      home: BlocBuilder<LoginBloc, LoginState>(
-        bloc: LoginBloc()..add(CheckLoggedInStateEvent()),
-        builder: (context, state) {
-          if (state is LoggedInState) {
-            return const TablePage();
-          } else {
-            return const LoginPage();
-          }
-        },
+    BlocProvider<LoginBloc>(
+      create: (context) => LoginBloc(),
+      child: MaterialApp(
+        home: BlocBuilder<LoginBloc, LoginState>(
+          bloc: LoginBloc()..add(CheckLoggedInStateEvent()),
+          builder: (context, state) {
+            if (state is LoggedInState) {
+              return const TablePage();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ),
       ),
     ),
   );

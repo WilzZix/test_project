@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 abstract class LoginEvent {}
 
 class TryToLoginEvent extends LoginEvent {
-  final String phone;
+  final String email;
   final String password;
 
-  TryToLoginEvent(this.phone, this.password);
+  TryToLoginEvent(this.email, this.password);
 }
 
 class CheckLoggedInStateEvent extends LoginEvent {}

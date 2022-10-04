@@ -11,7 +11,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  String phone = '', name = '', password = '';
+  String email = '', name = '', password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +98,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               const SizedBox(height: 20),
                               TextField(
                                 onChanged: (value) {
-                                  phone = value;
+                                  email = value;
                                 },
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                  hintText: 'Введите свой номер телефона',
+                                  hintText: 'Введите свой email',
                                   hintStyle: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -155,13 +155,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   builder: (context, state) {
                                     return GestureDetector(
                                       onTap: () {
-                                        RegistrationBloc().add(UserRegisterEvent(phone, password, name));
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => const LoginPage(),
-                                          ),
-                                        );
+                                        RegistrationBloc().add(UserRegisterEvent(email, password, name));
+                                        if (state is WeakPasswordState) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(state.message!),
+                                            ),
+                                          );
+                                        }
+
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => const LoginPage(),
+                                        //   ),
+                                        // );
                                       },
                                       child: Container(
                                         height: 50,

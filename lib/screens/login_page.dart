@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String phone = '';
+  String email = '';
   String password = '';
 
   @override
@@ -75,11 +75,11 @@ class _LoginPageState extends State<LoginPage> {
                             children: <Widget>[
                               TextField(
                                 onChanged: (value) {
-                                  phone = value;
+                                  email = value;
                                 },
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.emailAddress,
                                 decoration: InputDecoration(
-                                  hintText: 'Введите свой номер телефона',
+                                  hintText: 'Введите свой email',
                                   hintStyle: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -144,17 +144,18 @@ class _LoginPageState extends State<LoginPage> {
                                 create: (context) => LoginBloc(),
                                 child: BlocBuilder<LoginBloc, LoginState>(
                                   builder: (context, state) {
+                                    print('LOGIN PAGE STATE $state');
                                     return GestureDetector(
                                       onTap: () {
-                                        LoginBloc().add(TryToLoginEvent(phone, password));
-                                        if (state is LoggedInState) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => const RegistrationPage(),
-                                            ),
-                                          );
-                                        }
+                                        LoginBloc().add(TryToLoginEvent(email, password));
+                                        // if (state is LoggedInState) {
+                                        //   Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //       builder: (context) => const RegistrationPage(),
+                                        //     ),
+                                        //   );
+                                        // }
                                         if (state is LoggingInErrorState) {
                                           const SnackBar(
                                             content: Text('Попробуйте зарегистрироваться'),

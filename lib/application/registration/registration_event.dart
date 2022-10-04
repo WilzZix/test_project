@@ -4,9 +4,9 @@ part of 'registration_bloc.dart';
 abstract class RegistrationEvent {}
 
 class UserRegisterEvent extends RegistrationEvent {
-  final String phone;
+  final String email;
   final String password;
   final String name;
 
-  UserRegisterEvent(this.phone, this.password, this.name);
+  UserRegisterEvent(this.email, this.password, this.name);
 }
