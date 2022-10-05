@@ -4,6 +4,8 @@ import 'package:test_project/application/login/login_bloc.dart';
 import 'package:test_project/application/login/login_event.dart';
 import 'package:test_project/screens/registration_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_project/screens/table_page/table_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -140,49 +142,44 @@ class _LoginPageState extends State<LoginPage> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              BlocProvider(
-                                create: (context) => LoginBloc(),
-                                child: BlocBuilder<LoginBloc, LoginState>(
-                                  builder: (context, state) {
-                                    print('LOGIN PAGE STATE $state');
-                                    return GestureDetector(
-                                      onTap: () {
-                                        LoginBloc().add(TryToLoginEvent(email, password));
-                                        // if (state is LoggedInState) {
-                                        //   Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //       builder: (context) => const RegistrationPage(),
-                                        //     ),
-                                        //   );
-                                        // }
-                                        if (state is LoggingInErrorState) {
-                                          const SnackBar(
-                                            content: Text('Попробуйте зарегистрироваться'),
-                                          );
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF203C7C),
-                                          borderRadius: BorderRadius.circular(14),
-                                          shape: BoxShape.rectangle,
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            'Войти',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white,
-                                            ),
+                              BlocConsumer<LoginBloc, LoginState>(
+                                listener: (context, state) {
+                                  if (state is GoHomeScreenState) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const TablePage(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                builder: (context, state) {
+                                  return GestureDetector(
+                                    onTap: ()  {
+                                      final prefs = SharedPreferences.getInstance();
+                                     // prefs.setString('authStatus', 'loggedIn');
+                                      BlocProvider.of<LoginBloc>(context).add(TryToLoginEvent(email, password));
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF203C7C),
+                                        borderRadius: BorderRadius.circular(14),
+                                        shape: BoxShape.rectangle,
+                                      ),
+                                      child: const Center(
+                                        child: Text(
+                                          'Войти',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
                               const SizedBox(
                                 height: 20,

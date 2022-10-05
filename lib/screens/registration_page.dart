@@ -155,7 +155,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   builder: (context, state) {
                                     return GestureDetector(
                                       onTap: () {
-                                        RegistrationBloc().add(UserRegisterEvent(email, password, name));
+                                        BlocProvider.of<RegistrationBloc>(context).add(UserRegisterEvent(email, password, name));
+                                        //RegistrationBloc().add(UserRegisterEvent(email, password, name));
                                         if (state is WeakPasswordState) {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
@@ -163,13 +164,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                             ),
                                           );
                                         }
-
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) => const LoginPage(),
-                                        //   ),
-                                        // );
+                                        if (state is UserRegistrationCompleteState) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => const LoginPage(),
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: Container(
                                         height: 50,

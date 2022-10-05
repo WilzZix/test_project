@@ -11,10 +11,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<TryToLoginEvent>((event, emit) async {
       try {
-        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: event.email, password: event.password);
+        print('HELLO');
+        UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: event.email,
+          password: event.password,
+        );
+        print('hello 2');
         print(userCredential);
         if (userCredential.user != null) {
-          emit(LoggedInState());
+
+          print('hello success');
+          emit(GoHomeScreenState());
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
@@ -30,6 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (event, emit) async {
         User? user = FirebaseAuth.instance.currentUser;
         if (user != null) {
+          //print()
           emit(LoggedInState());
         } else {
           emit(NotLoggedInState());

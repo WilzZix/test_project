@@ -9,6 +9,8 @@ class LoginLoadingState extends LoginState {}
 
 class LoggedInState extends LoginState {}
 
+class GoHomeScreenState extends LoginState{}
+
 class LoggingInErrorState extends LoginState {}
 
 class NotLoggedInState extends LoginState {}

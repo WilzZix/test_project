@@ -7,6 +7,7 @@ import '../login_page.dart';
 import 'components/pie_chart_widget.dart';
 import 'components/table_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TablePage extends StatefulWidget {
   const TablePage({Key? key}) : super(key: key);
@@ -16,12 +17,16 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
+
+  final LoginBloc loginBloc = LoginBloc();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocProvider(
         create: (context) => LoginBloc(),
         child: BlocBuilder<LoginBloc, LoginState>(
+          bloc: loginBloc,
           builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
@@ -30,7 +35,8 @@ class _TablePageState extends State<TablePage> {
                     Icons.logout,
                   ),
                   onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.setString('authStatus', 'loggedOut');
                     LoginBloc().add(LogOutEvent());
                     Navigator.push(
                       context,
