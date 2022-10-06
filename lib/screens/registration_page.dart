@@ -12,6 +12,7 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   String email = '', name = '', password = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +157,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     return GestureDetector(
                                       onTap: () {
                                         BlocProvider.of<RegistrationBloc>(context).add(UserRegisterEvent(email, password, name));
-                                        //RegistrationBloc().add(UserRegisterEvent(email, password, name));
                                         if (state is WeakPasswordState) {
+                                          loading = false;
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
                                               content: Text(state.message!),
@@ -165,12 +166,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           );
                                         }
                                         if (state is UserRegistrationCompleteState) {
+                                          loading = false;
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => const LoginPage(),
                                             ),
                                           );
+                                        }
+                                        if (state is UserRegistrationLoadingState) {
+                                          loading = true;
+                                        }
+                                        if (state is UserRegistrationErrorState) {
+                                          loading = false;
                                         }
                                       },
                                       child: Container(
@@ -181,14 +189,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           borderRadius: BorderRadius.circular(14),
                                           shape: BoxShape.rectangle,
                                         ),
-                                        child: const Center(
-                                          child: Text(
-                                            'Зарегистрироваться',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                        child: Center(
+                                          child: loading
+                                              ? const CircularProgressIndicator()
+                                              : const Text(
+                                                  'Зарегистрироваться',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
                                         ),
                                       ),
                                     );

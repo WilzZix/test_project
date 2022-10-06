@@ -11,22 +11,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<TryToLoginEvent>((event, emit) async {
       try {
-        print('HELLO');
+        emit(LoginLoadingState());
         UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: event.email,
           password: event.password,
         );
-        print('hello 2');
-        print(userCredential);
         if (userCredential.user != null) {
-
-          print('hello success');
           emit(GoHomeScreenState());
         }
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
+          emit(LoggingInErrorState(e.message!));
         } else if (e.code == 'wrong-password') {
+          emit(LoggingInErrorState(e.message!));
           print('Wrong password provided for that user.');
         }
       } catch (e) {

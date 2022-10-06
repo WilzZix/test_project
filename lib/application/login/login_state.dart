@@ -11,7 +11,11 @@ class LoggedInState extends LoginState {}
 
 class GoHomeScreenState extends LoginState{}
 
-class LoggingInErrorState extends LoginState {}
+class LoggingInErrorState extends LoginState {
+  final String message;
+
+  LoggingInErrorState(this.message);
+}
 
 class NotLoggedInState extends LoginState {}
 

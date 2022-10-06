@@ -4,7 +4,6 @@ import 'package:test_project/application/login/login_bloc.dart';
 import 'package:test_project/application/login/login_event.dart';
 import 'package:test_project/screens/registration_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_project/screens/table_page/table_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -155,10 +155,23 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                                 builder: (context, state) {
                                   return GestureDetector(
-                                    onTap: ()  {
-                                      final prefs = SharedPreferences.getInstance();
-                                     // prefs.setString('authStatus', 'loggedIn');
+                                    onTap: () {
                                       BlocProvider.of<LoginBloc>(context).add(TryToLoginEvent(email, password));
+                                      if (state is LoggingInErrorState) {
+                                        loading = false;
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(state.message),
+                                          ),
+                                        );
+                                      }
+                                      if (state is LoginLoadingState) {
+
+                                        loading = true;
+                                      }
+                                      if (state is GoHomeScreenState) {
+                                        loading = false;
+                                      }
                                     },
                                     child: Container(
                                       height: 50,
@@ -168,14 +181,16 @@ class _LoginPageState extends State<LoginPage> {
                                         borderRadius: BorderRadius.circular(14),
                                         shape: BoxShape.rectangle,
                                       ),
-                                      child: const Center(
-                                        child: Text(
-                                          'Войти',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                                      child: Center(
+                                        child: loading
+                                            ? const CircularProgressIndicator(color: Colors.white,)
+                                            : const Text(
+                                                'Войти',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                       ),
                                     ),
                                   );
