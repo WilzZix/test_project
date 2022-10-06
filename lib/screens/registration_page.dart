@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:test_project/screens/login_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../application/registration/registration_bloc.dart';
+import 'package:flutter/gestures.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -203,6 +204,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       ),
                                     );
                                   },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const LoginPage(),
+                                        ),
+                                      );
+                                    },
+                                  text: 'У меня уже есть аккаунт',
+                                  style: const TextStyle(
+                                    color: Color(0xFF203C7C),
+                                  ),
                                 ),
                               ),
                               const SizedBox(

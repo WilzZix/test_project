@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../application/login/login_bloc.dart';
 import '../../application/login/login_event.dart';
 import '../login_page.dart';
 import 'components/pie_chart_widget.dart';
 import 'components/table_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TablePage extends StatefulWidget {
   const TablePage({Key? key}) : super(key: key);
@@ -17,73 +14,66 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
-
-  final LoginBloc loginBloc = LoginBloc();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: BlocProvider(
-        create: (context) => LoginBloc(),
-        child: BlocBuilder<LoginBloc, LoginState>(
-          bloc: loginBloc,
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                  ),
-                  onPressed: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setString('authStatus', 'loggedOut');
-                    LoginBloc().add(LogOutEvent());
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                  },
+      child: BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LogOutState) {
+            print('LOGGED OUT2');
+            Navigator.pop(context);
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.logout,
                 ),
+                onPressed: () {
+                  print('LOGGED OUT0');
+                  BlocProvider.of<LoginBloc>(context).add((LogOutEvent()));
+                  print('LOGGED OUT1');
+                },
               ),
-              body: OrientationBuilder(builder: (context, orientation) {
-                return SingleChildScrollView(
-                  child: orientation == Orientation.portrait
-                      ? Column(
-                          children: [
-                            const Center(
-                              child: Text(
-                                'Список стран по добыче нефти в % по данным «Опек»,',
-                                style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
-                              ),
+            ),
+            body: OrientationBuilder(builder: (context, orientation) {
+              return SingleChildScrollView(
+                child: orientation == Orientation.portrait
+                    ? Column(
+                        children: [
+                          const Center(
+                            child: Text(
+                              'Список стран по добыче нефти в % по данным «Опек»,',
+                              style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
                             ),
-                            const SizedBox(
-                              height: 20,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          PieChartWidget(),
+                          const TableWidget(),
+                        ],
+                      )
+                    : Column(
+                        children: const [
+                          Center(
+                            child: Text(
+                              'Список стран по добыче нефти в % по данным «Опек»,',
+                              style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
                             ),
-                            PieChartWidget(),
-                            const TableWidget(),
-                          ],
-                        )
-                      : Column(
-                          children: const [
-                            Center(
-                              child: Text(
-                                'Список стран по добыче нефти в % по данным «Опек»,',
-                                style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            TableWidget(),
-                          ],
-                        ),
-                );
-              }),
-            );
-          },
-        ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TableWidget(),
+                        ],
+                      ),
+              );
+            }),
+          );
+        },
       ),
     );
   }

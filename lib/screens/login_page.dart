@@ -125,20 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: [
-                                  Checkbox(checkColor: const Color(0xFF203C7C), value: false, onChanged: (value) {}),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  const Text(
-                                    'Запомнить меня',
-                                  ),
-                                ],
-                              ),
+
                               const SizedBox(
                                 height: 20,
                               ),

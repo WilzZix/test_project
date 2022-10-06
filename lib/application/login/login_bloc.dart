@@ -11,12 +11,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<TryToLoginEvent>((event, emit) async {
       try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
         emit(LoginLoadingState());
         UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: event.email,
           password: event.password,
         );
         if (userCredential.user != null) {
+          prefs.setString('authStatus', 'LoggedIn');
           emit(GoHomeScreenState());
         }
       } on FirebaseAuthException catch (e) {
@@ -33,12 +35,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
     on<CheckLoggedInStateEvent>(
       (event, emit) async {
-        User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          //print()
-          emit(LoggedInState());
-        } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        //  User? user = FirebaseAuth.instance.currentUser;
+        if (prefs.getString('authStatus')!.startsWith('not')) {
           emit(NotLoggedInState());
+        } else {
+          emit(LoggedInState());
         }
       },
     );
