@@ -10,7 +10,6 @@ import 'package:firebase_core/firebase_core.dart';
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  Future.delayed(const Duration(seconds: 3));
   runApp(
     BlocProvider<LoginBloc>(
       create: (context) => LoginBloc()..add(CheckLoggedInStateEvent()),
