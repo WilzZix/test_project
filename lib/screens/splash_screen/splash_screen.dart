@@ -13,9 +13,7 @@ class SplashScreen extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.center,
-            child: SvgPicture.asset(
-              'assets/images/logo_eriell.svg',
-            ),
+            child: Image.asset('assets/images/logo_eriell.png'),
           ),
         ],
       ),

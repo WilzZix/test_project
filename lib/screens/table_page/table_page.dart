@@ -32,44 +32,46 @@ class _TablePageState extends State<TablePage> {
                   Icons.logout,
                 ),
                 onPressed: () {
-                  print('LOGGED OUT0');
                   BlocProvider.of<LoginBloc>(context).add((LogOutEvent()));
-                  print('LOGGED OUT1');
                 },
               ),
             ),
             body: OrientationBuilder(builder: (context, orientation) {
               return SingleChildScrollView(
                 child: orientation == Orientation.portrait
-                    ? Column(
-                        children: [
-                          const Center(
-                            child: Text(
-                              'Список стран по добыче нефти в % по данным «Опек»,',
-                              style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                    ? Expanded(
+                      child: Column(
+                          children: [
+                            const Center(
+                              child: Text(
+                                'Список стран по добыче нефти в % по данным «Опек»,',
+                                style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          PieChartWidget(),
-                          const TableWidget(),
-                        ],
-                      )
-                    : Column(
-                        children: const [
-                          Center(
-                            child: Text(
-                              'Список стран по добыче нефти в % по данным «Опек»,',
-                              style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TableWidget(),
-                        ],
-                      ),
+                            PieChartWidget(),
+                             TableWidget(),
+                          ],
+                        ),
+                    )
+                    : Expanded(
+                      child: Column(
+                          children:  [
+                            const Center(
+                              child: Text(
+                                'Список стран по добыче нефти в % по данным «Опек»,',
+                                style: TextStyle(fontSize: 20, fontFamily: 'Raleway'),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            TableWidget(),
+                          ],
+                        ),
+                    ),
               );
             }),
           );

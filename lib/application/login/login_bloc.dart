@@ -35,6 +35,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
     on<CheckLoggedInStateEvent>(
       (event, emit) async {
+        emit(LoginLoadingState());
         SharedPreferences prefs = await SharedPreferences.getInstance();
         //  User? user = FirebaseAuth.instance.currentUser;
         if (prefs.getString('authStatus')!.startsWith('not')) {

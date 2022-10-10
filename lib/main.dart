@@ -9,27 +9,23 @@ import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  Firebase.initializeApp();
   runApp(
     BlocProvider<LoginBloc>(
       create: (context) => LoginBloc()..add(CheckLoggedInStateEvent()),
       child: MaterialApp(
-        home: FutureBuilder(
-            future: _initialization,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return BlocBuilder<LoginBloc, LoginState>(
-                  builder: (context, state) {
-                    if (state is LoggedInState) {
-                      return const TablePage();
-                    } else {
-                      return const LoginPage();
-                    }
-                  },
-                );
-              }
+        debugShowCheckedModeBanner: false,
+        home: BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            if (state is LoggedInState) {
+              return const TablePage();
+            } else if (state is LoginLoadingState) {
               return const SplashScreen();
-            }),
+            } else {
+              return const LoginPage();
+            }
+          },
+        ),
       ),
     ),
   );
